@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Results</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .top-actions {
+            margin-bottom: 25px;
+        }
+
+        .top-actions a {
+            padding: 12px 18px;
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 6px;
+            margin-right: 12px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .top-actions a:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .user-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .user-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .user-card-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex: 1 1 300px; /* Make content flexible and shrink on smaller screens */
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-info p {
+            margin: 4px 0;
+            color: #555;
+        }
+
+        .user-info p strong {
+            color: #333;
+        }
+
+        .user-actions {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .user-actions a {
+            padding: 8px 14px;
+            text-decoration: none;
+            color: white;
+            border-radius: 6px;
+            margin-left: 8px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            margin-top: 5px;
+        }
+
+        .edit-btn {
+            background-color: #2196F3;
+        }
+
+        .edit-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+        }
+
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .user-card img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            transition: transform 0.3s;
+        }
+
+        .user-card img:hover {
+            transform: scale(1.05);
+            border-color: #2196F3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .user-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .user-card-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .user-info {
+                align-items: center;
+            }
+
+            .user-actions {
+                justify-content: center;
+                width: 100%;
+                margin-top: 15px;
+            }
+
+            .user-actions a {
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .user-card img {
+                width: 70px;
+                height: 70px;
+            }
+
+            .top-actions a {
+                padding: 10px 14px;
+                margin-bottom: 10px;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-actions">
+    <a th:href="@{/userprofile/create}">Add New Profile</a>
+    <a th:href="@{/userprofile/search}">Back to Search</a>
+</div>
+
+<h2>Search Results for "<span th:text="${keyword}"></span>"</h2>
+
+<!-- Show message if no profiles found -->
+<div th:if="${message}">
+    <p th:text="${message}" style="color:#f44336; font-weight:bold;"></p>
+</div>
+
+<!-- Loop through profiles -->
+<div th:if="${userprofiles != null}">
+    <div th:each="userprofile : ${userprofiles}" class="user-card">
+        <div class="user-card-content">
+            <img th:src="@{'/uploads/' + ${userprofile.profilePicture}}" alt="Profile Picture" /><br>
+            <p><strong>Name:</strong> <span th:text="${userprofile.name}"></span></p><br>
+            <p><strong>Email:</strong> <span th:text="${userprofile.email}"></span></p><br>
+            <p><strong>Phone:</strong> <span th:text="${userprofile.phoneNumber}"></span></p><br>
+            <p><strong>Gender:</strong> <span th:text="${userprofile.gender}"></span></p><br>
+            <p><strong>Address:</strong> <span th:text="${userprofile.address}"></span></p><br>
+        </div>
+        <div class="user-actions">
+            <a th:href="@{'/userprofile/edit/' + ${userprofile.id}}" class="edit-btn">Edit</a>
+            <a th:href="@{'/userprofile/delete/' + ${userprofile.id}}" class="delete-btn"
+               onclick="return confirm('Are you sure you want to delete this profile?');">Delete</a>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+</html>

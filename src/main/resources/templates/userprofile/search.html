@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Saved Profile & Search</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f9f9f9; }
+        .container { background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 600px; margin: auto; }
+        img { width: 120px; height: 120px; border-radius: 50%; margin-top: 10px; }
+        form input[type="text"] { width: 70%; padding: 8px; margin-right: 10px; }
+        form button { padding: 8px 12px; }
+        .profile-view { margin-top: 30px; background: #f0f8ff; padding: 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Search Form -->
+    <form th:action="@{/userprofile/search}" method="post">
+        <input type="text" name="keyword" placeholder="Search by name" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <hr>
+
+    <!-- Saved Profile -->
+    <div class="profile-view" th:if="${savedProfile}">
+        <h3>Saved Profile Data</h3>
+        <p><strong>Name:</strong> <span th:text="${savedProfile.name}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${savedProfile.email}"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${savedProfile.phoneNumber}"></span></p>
+        <p><strong>Gender:</strong> <span th:text="${savedProfile.gender}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${savedProfile.address}"></span></p>
+
+        <div th:if="${savedProfile.profilePicture}">
+            <p><strong>Profile Picture:</strong></p>
+            <img th:src="'data:image/jpeg;base64,' + ${T(org.apache.tomcat.util.codec.binary.Base64).encodeBase64String(savedProfile.profilePicture)}" alt="Profile Image"/>
+        </div>
+
+        <br>
+        <a th:href="@{/userprofile/create}">➕ Create Another Profile</a>
+    </div>
+
+</div>
+</body>
+</html>
